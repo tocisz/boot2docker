@@ -372,7 +372,7 @@ RUN wget -O /vbox.iso "https://download.virtualbox.org/virtualbox/$VBOX_VERSION/
 RUN make -C /usr/src/vbox/amd64/src/vboxguest -j "$(nproc)" \
 		KERN_DIR='/usr/src/linux' \
 		KERN_VER="$(< /usr/src/linux/include/config/kernel.release)" \
-		vboxguest vboxsf \
+		vboxguest vboxsf vboxvideo \
 	; \
 	cp -v /usr/src/vbox/amd64/src/vboxguest/*.ko lib/modules/*/; \
 # create hacky symlink so these binaries can work as-is
@@ -548,6 +548,8 @@ COPY files/isolinux.cfg /tmp/iso/isolinux/
 
 COPY files/init.d/* ./etc/init.d/
 COPY files/bootsync.sh ./opt/
+
+RUN tcl-tce-load Xorg-7.7 aterm flwm vim
 
 # temporary boot debugging aid
 #RUN sed -i '2i set -x' etc/init.d/tc-config
